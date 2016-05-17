@@ -8,16 +8,31 @@
 
 import UIKit
 
-class DiscoveryTableViewController: UITableViewController {
-
+class DiscoveryTableViewController: UITableViewController, UISearchBarDelegate {
+    
+    // Mark: Properties
+    
+    var events = [Event]()
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        searchBar.delegate = self
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        // Load sample data
+        
+        loadSampleEvents()
+        
+        callJSON()
+    }
+    
+    func loadSampleEvents() {
+        let event1 = Event(name: "Wiz Khalifa Concert")
+        let event2 = Event(name: "Taylor Swift Concert")
+        let event3 = Event(name: "Jason Aldean Concert")
+        
+        events += [event1, event2, event3]
     }
 
     override func didReceiveMemoryWarning() {
@@ -28,68 +43,78 @@ class DiscoveryTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return events.count
     }
 
-    /*
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
 
-        // Configure the cell...
+        // Cell identifier
+        
+        let cellIdentifier = "DiscoveryTableViewCell"
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! DiscoveryTableViewCell
+        
+        // Return appropriate event
+        
+        let event = events[indexPath.row]
+        cell.nameLabel.text = event.name
 
         return cell
     }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    
+    // Mark: Handling API Request
+    
+    func callJSON() {
+        let endpoint: String = "https://app.ticketmaster.com/discovery/v1/events.json?apikey=WaPwayOHGN4PCY1EieuT2nCM5H8tufYf"
+        guard let url = NSURL(string: endpoint) else {
+            print("Error: cannot create URL")
+            return
+        }
+        let urlRequest = NSURLRequest(URL: url)
+        
+        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let session = NSURLSession(configuration: config)
+        
+        let task = session.dataTaskWithRequest(urlRequest) {
+            (data, response, error) in
+            // check for any errors
+            guard error == nil else {
+                print("error calling GET on /discovery/v1")
+                print(error)
+                return
+            }
+            // make sure there's data
+            guard let responseData = data else {
+                print("Error: did not receive data")
+                return
+            }
+            // parse result as JSON
+            do {
+                guard let object = try NSJSONSerialization.JSONObjectWithData(responseData, options: []) as? [String: AnyObject] else {
+                    print("error trying to convert data to JSON")
+                    return
+                }
+                // print object
+                //print("Here is the object: " + object.description)
+                
+                // access event names
+                let eventArray = object["_embedded"]!["events"] as! [[String: AnyObject]]
+                
+                for event in eventArray {
+                    print("*********************************************************************************************")
+                    print(event["name"]!)
+                }
+                
+            } catch  {
+                print("error trying to convert data to JSON")
+                return
+            }
+        }
+        task.resume()
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

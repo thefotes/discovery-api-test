@@ -9,6 +9,10 @@
 import UIKit
 
 class DiscoveryTableViewCell: UITableViewCell {
+    
+    // Mark: Properties
+    
+    @IBOutlet weak var nameLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()

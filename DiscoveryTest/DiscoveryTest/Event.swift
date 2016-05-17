@@ -9,5 +9,14 @@
 import UIKit
 
 class Event: NSObject {
-
+    
+    // Mark: Properties
+    
+    var name: String
+    
+    // Mark: Initialization
+    
+    init(name: String) {
+        self.name = name
+    }
 }
