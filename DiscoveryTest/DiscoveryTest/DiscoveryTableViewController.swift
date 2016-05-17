@@ -8,12 +8,12 @@
 
 import UIKit
 
-class DiscoveryTableViewController: UITableViewController, UISearchBarDelegate {
+final class DiscoveryTableViewController: UITableViewController, UISearchBarDelegate {
     
     // Mark: Properties
     
     var events = [Event]()
-    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet private weak var searchBar: UISearchBar!
     
     override func viewDidLoad() {
         super.viewDidLoad()

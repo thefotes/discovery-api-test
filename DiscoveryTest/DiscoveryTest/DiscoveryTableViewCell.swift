@@ -8,11 +8,11 @@
 
 import UIKit
 
-class DiscoveryTableViewCell: UITableViewCell {
+final class DiscoveryTableViewCell: UITableViewCell {
     
     // Mark: Properties
     
-    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet private weak var nameLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()

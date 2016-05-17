@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Event: NSObject {
+final class Event: NSObject {
     
     // Mark: Properties
     
