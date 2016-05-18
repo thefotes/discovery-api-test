@@ -8,21 +8,14 @@
 
 import UIKit
 
-class DiscoveryTableViewCell: UITableViewCell {
+final class DiscoveryTableViewCell: UITableViewCell, TableViewCellReusable {
     
-    // Mark: Properties
+    // MARK: Properties
     
-    @IBOutlet weak var nameLabel: UILabel!
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    @IBOutlet private weak var nameLabel: UILabel!
+    
+    func configureWithEvent(event: Event) {
+        nameLabel.text = event.name
     }
 
 }

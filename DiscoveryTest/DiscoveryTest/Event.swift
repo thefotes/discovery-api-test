@@ -8,15 +8,7 @@
 
 import UIKit
 
-class Event: NSObject {
-    
-    // Mark: Properties
-    
+struct Event {
     var name: String
-    
-    // Mark: Initialization
-    
-    init(name: String) {
-        self.name = name
-    }
+    var dictionary: [String: AnyObject]
 }
