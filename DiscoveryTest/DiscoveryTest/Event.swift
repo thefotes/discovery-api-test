@@ -8,15 +8,6 @@
 
 import UIKit
 
-final class Event: NSObject {
-    
-    // Mark: Properties
-    
+struct Event {
     var name: String
-    
-    // Mark: Initialization
-    
-    init(name: String) {
-        self.name = name
-    }
 }

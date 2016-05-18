@@ -12,17 +12,6 @@ final class DiscoveryTableViewCell: UITableViewCell, TableViewCellReusable {
     
     // Mark: Properties
     @IBOutlet private weak var nameLabel: UILabel!
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    /*override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }*/
     
     func configureWithEvent(event: Event) {
         nameLabel.text = event.name

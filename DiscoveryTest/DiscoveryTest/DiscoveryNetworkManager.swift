@@ -13,7 +13,7 @@ final class DiscoveryNetworkManager {
     
     // shared instance
     
-    private let sharedInstance = DiscoveryNetworkManager()
+    static let sharedInstance = DiscoveryNetworkManager()
     
     // private init because its singleton
     
