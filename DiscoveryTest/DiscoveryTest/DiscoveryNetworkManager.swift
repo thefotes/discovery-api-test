@@ -27,7 +27,7 @@ final class DiscoveryNetworkManager {
     
     // get most recent events
     
-    static func getRecentEventsIntoConsole() {
+    func getRecentEventsIntoConsole() {
         let endpoint: String = "https://app.ticketmaster.com/discovery/v1/events.json?apikey=WaPwayOHGN4PCY1EieuT2nCM5H8tufYf"
         guard let url = NSURL(string: endpoint) else {
             print("Error: cannot create URL")
@@ -57,8 +57,6 @@ final class DiscoveryNetworkManager {
                     print("error trying to convert data to JSON")
                     return
                 }
-                // print object
-                //print("Here is the object: " + object.description)
                 
                 // access event names
                 let eventArray = object["_embedded"]!["events"] as! [[String: AnyObject]]

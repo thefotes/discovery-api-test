@@ -9,11 +9,11 @@
 import UIKit
 
 protocol TableViewCellReusable {
-    static var reIdentifier: String { get }
+    static var reuseableIdentifier: String { get }
 }
 
 extension TableViewCellReusable where Self: UITableViewCell {
-    static var reIdentifier: String {
+    static var reuseableIdentifier: String {
         return String(self).componentsSeparatedByString(".").last!
     }
 }

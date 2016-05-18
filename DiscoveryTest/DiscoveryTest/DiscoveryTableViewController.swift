@@ -22,11 +22,7 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
         
         // call api
         
-        DiscoveryNetworkManager.getRecentEventsIntoConsole()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+        DiscoveryNetworkManager.sharedInstance.getRecentEventsIntoConsole()
     }
 
     // MARK: Table view data source
@@ -42,7 +38,7 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 
-        let dequeuedCell = tableView.dequeueReusableCellWithIdentifier(DiscoveryTableViewCell.reIdentifier, forIndexPath: indexPath) as! DiscoveryTableViewCell
+        let dequeuedCell = tableView.dequeueReusableCellWithIdentifier(DiscoveryTableViewCell.reuseableIdentifier, forIndexPath: indexPath) as! DiscoveryTableViewCell
         
         // Return appropriate event
         
