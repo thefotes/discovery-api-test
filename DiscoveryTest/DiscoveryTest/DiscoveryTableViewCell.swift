@@ -10,7 +10,8 @@ import UIKit
 
 final class DiscoveryTableViewCell: UITableViewCell, TableViewCellReusable {
     
-    // Mark: Properties
+    // MARK: Properties
+    
     @IBOutlet private weak var nameLabel: UILabel!
     
     func configureWithEvent(event: Event) {

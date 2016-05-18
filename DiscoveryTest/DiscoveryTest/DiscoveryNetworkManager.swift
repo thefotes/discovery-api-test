@@ -11,13 +11,19 @@ import Foundation
 
 final class DiscoveryNetworkManager {
     
+    // MARK: Properties
+    
     // shared instance
     
     static let sharedInstance = DiscoveryNetworkManager()
     
+    // MARK: Initialization
+    
     // private init because its singleton
     
     private init() {}
+    
+    // MARK: API Calls
     
     // get most recent events
     

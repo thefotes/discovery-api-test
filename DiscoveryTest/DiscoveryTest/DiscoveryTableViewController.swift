@@ -10,7 +10,7 @@ import UIKit
 
 final class DiscoveryTableViewController: UITableViewController, UISearchBarDelegate {
     
-    // Mark: Properties
+    // MARK: Properties
     
     var events = [Event]()
     @IBOutlet private weak var searchBar: UISearchBar!
@@ -29,7 +29,7 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
         super.didReceiveMemoryWarning()
     }
 
-    // MARK: - Table view data source
+    // MARK: Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
