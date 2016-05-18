@@ -6,7 +6,7 @@
 //  Copyright © 2016 Jason Chitla. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 
 final class DiscoveryNetworkManager {
@@ -16,8 +16,6 @@ final class DiscoveryNetworkManager {
     // shared instance
     
     static let sharedInstance = DiscoveryNetworkManager()
-    
-    var events = [Event]()
     
     // MARK: Initialization
     
@@ -29,7 +27,7 @@ final class DiscoveryNetworkManager {
     
     // get events with text
     
-    func setEventsWithKeyword(keyword: String, completion: () -> Void) {
+    func setEvents(withKeyword keyword: String, completion: (events: [Event]) -> ()) {
         let endpoint: String = "https://app.ticketmaster.com/discovery/v1/events.json?apikey=WaPwayOHGN4PCY1EieuT2nCM5H8tufYf&keyword=" + keyword
         guard let url = NSURL(string: endpoint) else {
             print("Error: cannot create URL")
@@ -62,11 +60,15 @@ final class DiscoveryNetworkManager {
                 
                 // access event names
                 let eventArray = object["_embedded"]!["events"] as! [[String: AnyObject]]
+                var events = [Event]()
                 
                 for event in eventArray {
-                    self.events += [Event(name: event["name"] as! String, dictionary: event)]
+                    events += [Event(name: event["name"] as! String, dictionary: event)]
                 }
                 
+                dispatch_async(dispatch_get_main_queue(), { 
+                    completion(events: events)
+                })
             } catch  {
                 print("error trying to convert data to JSON")
                 return

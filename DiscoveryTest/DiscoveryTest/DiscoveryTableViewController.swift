@@ -15,6 +15,8 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
     let indicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
     @IBOutlet private weak var searchBar: UISearchBar!
     
+    var events = [Event]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,7 +33,7 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return DiscoveryNetworkManager.sharedInstance.events.count
+        return self.events.count
     }
 
     
@@ -41,7 +43,7 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
         
         // return appropriate event
         
-        let event = DiscoveryNetworkManager.sharedInstance.events[indexPath.row]
+        let event = events[indexPath.row]
         dequeuedCell.configureWithEvent(event)
 
         return dequeuedCell
@@ -56,7 +58,12 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
         
         // assuming not empty text field
         
-        DiscoveryNetworkManager.sharedInstance.setEventsWithKeyword(searchBar.text!)
+        DiscoveryNetworkManager.sharedInstance.setEvents(withKeyword: searchBar.text!) {
+            (result) -> () in
+            self.events = result
+            self.tableView.reloadData()
+            self.indicator.stopAnimating()
+        }
     }
 
 }
