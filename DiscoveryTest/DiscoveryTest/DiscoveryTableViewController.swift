@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class DiscoveryTableViewController: UITableViewController, UISearchBarDelegate, AccessTicketMasterAPI {
+final class DiscoveryTableViewController: UITableViewController, UISearchBarDelegate {
     
     // Mark: Properties
     
@@ -20,7 +20,9 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
         
         searchBar.delegate = self
         
-        getRecentEventsIntoConsole()
+        // call api
+        
+        DiscoveryNetworkManager.getRecentEventsIntoConsole()
     }
 
     override func didReceiveMemoryWarning() {
