@@ -14,7 +14,7 @@ final class DiscoveryTableViewCell: UITableViewCell {
     
     @IBOutlet private weak var nameLabel: UILabel!
 
-    override func awakeFromNib() {
+    /*override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
@@ -23,6 +23,10 @@ final class DiscoveryTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }*/
+    
+    func configureWithEvent(event: Event) {
+        nameLabel.text = event.name
     }
 
 }

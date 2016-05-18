@@ -19,25 +19,12 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
         super.viewDidLoad()
         
         searchBar.delegate = self
-
-        // Load sample data
-        
-        loadSampleEvents()
         
         callJSON()
-    }
-    
-    func loadSampleEvents() {
-        let event1 = Event(name: "Wiz Khalifa Concert")
-        let event2 = Event(name: "Taylor Swift Concert")
-        let event3 = Event(name: "Jason Aldean Concert")
-        
-        events += [event1, event2, event3]
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Table view data source
@@ -61,7 +48,7 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
         // Return appropriate event
         
         let event = events[indexPath.row]
-        cell.nameLabel.text = event.name
+        cell.configureWithEvent(event)
 
         return cell
     }
