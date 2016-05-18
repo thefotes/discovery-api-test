@@ -29,7 +29,7 @@ final class DiscoveryNetworkManager {
     
     // get events with text
     
-    func setEventsWithKeyword(keyword: String) {
+    func setEventsWithKeyword(keyword: String, completion: () -> Void) {
         let endpoint: String = "https://app.ticketmaster.com/discovery/v1/events.json?apikey=WaPwayOHGN4PCY1EieuT2nCM5H8tufYf&keyword=" + keyword
         guard let url = NSURL(string: endpoint) else {
             print("Error: cannot create URL")
