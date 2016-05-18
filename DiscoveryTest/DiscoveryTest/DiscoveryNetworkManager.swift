@@ -27,8 +27,9 @@ final class DiscoveryNetworkManager {
     
     // get events with text
     
-    func setEvents(withKeyword keyword: String, completion: (events: [Event]) -> ()) {
-        let endpoint: String = "https://app.ticketmaster.com/discovery/v1/events.json?apikey=WaPwayOHGN4PCY1EieuT2nCM5H8tufYf&keyword=" + keyword
+    func setEvents(withKeyword keyword: String, completion: (events: [Event]?) -> ()) {
+        let endpoint: String = "https://app.ticketmaster.com/discovery/v1/events.json?apikey=WaPwayOHGN4PCY1EieuT2nCM5H8tufYf&keyword=" +
+                                                                                    keyword.stringByReplacingOccurrencesOfString(" ", withString: "_")
         guard let url = NSURL(string: endpoint) else {
             print("Error: cannot create URL")
             return
@@ -59,22 +60,28 @@ final class DiscoveryNetworkManager {
                 }
                 
                 // access event names
-                let eventArray = object["_embedded"]!["events"] as! [[String: AnyObject]]
-                var events = [Event]()
+                if let eventArray = object["_embedded"]?["events"] as? [[String: AnyObject]] {
+                    var events = [Event]()
                 
-                for event in eventArray {
-                    events += [Event(name: event["name"] as! String, dictionary: event)]
+                    for event in eventArray {
+                        events += [Event(name: event["name"] as! String, dictionary: event)]
+                    }
+                
+                    dispatch_async(dispatch_get_main_queue(), {
+                        completion(events: events)
+                    })
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        completion(events: nil)
+                    })
                 }
-                
-                dispatch_async(dispatch_get_main_queue(), { 
-                    completion(events: events)
-                })
             } catch  {
                 print("error trying to convert data to JSON")
                 return
             }
         }
         task.resume()
+        
     }
     
     

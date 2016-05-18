@@ -60,10 +60,16 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
         
         DiscoveryNetworkManager.sharedInstance.setEvents(withKeyword: searchBar.text!) {
             (result) -> () in
-            self.events = result
-            self.tableView.reloadData()
+            if let result = result {
+                self.events = result
+                self.tableView.reloadData()
+            }
             self.indicator.stopAnimating()
         }
+        
+        // resign first responder
+        
+        searchBar.resignFirstResponder()
     }
 
 }
