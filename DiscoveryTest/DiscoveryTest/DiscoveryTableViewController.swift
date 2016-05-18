@@ -58,13 +58,19 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
         
         // assuming not empty text field
         
-        DiscoveryNetworkManager.sharedInstance.setEvents(withKeyword: searchBar.text!) {
-            (result) -> () in
+        DiscoveryNetworkManager.sharedInstance.returnEvents(withKeyword: searchBar.text!) {
+            (result, error) -> () in
+            
+            self.indicator.stopAnimating()
+            guard error == nil else {
+                print(error!)
+                return
+            }
+            
             if let result = result {
                 self.events = result
                 self.tableView.reloadData()
             }
-            self.indicator.stopAnimating()
         }
         
         // resign first responder

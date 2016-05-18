@@ -9,6 +9,5 @@
 import UIKit
 
 struct Event {
-    var name: String
     var dictionary: [String: AnyObject]
 }

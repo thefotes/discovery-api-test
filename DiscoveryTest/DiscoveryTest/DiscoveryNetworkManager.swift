@@ -27,11 +27,11 @@ final class DiscoveryNetworkManager {
     
     // get events with text
     
-    func setEvents(withKeyword keyword: String, completion: (events: [Event]?) -> ()) {
+    func returnEvents(withKeyword keyword: String, completion: (events: [Event]?, error: String?) -> ()) {
         let endpoint: String = "https://app.ticketmaster.com/discovery/v1/events.json?apikey=WaPwayOHGN4PCY1EieuT2nCM5H8tufYf&keyword=" +
                                                                                     keyword.stringByReplacingOccurrencesOfString(" ", withString: "_")
         guard let url = NSURL(string: endpoint) else {
-            print("Error: cannot create URL")
+            completion(events: nil, error: "Error: cannot create URL")
             return
         }
         let urlRequest = NSURLRequest(URL: url)
@@ -43,19 +43,18 @@ final class DiscoveryNetworkManager {
             (data, response, error) in
             // check for any errors
             guard error == nil else {
-                print("error calling GET on /discovery/v1")
-                print(error)
+                completion(events: nil, error: "error calling GET on /discovery/v1 w/error code: \(error!.code)")
                 return
             }
             // make sure there's data
             guard let responseData = data else {
-                print("Error: did not receive data")
+                completion(events: nil, error: "Error: did not receive data")
                 return
             }
             // parse result as JSON
             do {
                 guard let object = try NSJSONSerialization.JSONObjectWithData(responseData, options: []) as? [String: AnyObject] else {
-                    print("error trying to convert data to JSON")
+                    completion(events: nil, error: "error trying to convert data to JSON")
                     return
                 }
                 
@@ -64,19 +63,19 @@ final class DiscoveryNetworkManager {
                     var events = [Event]()
                 
                     for event in eventArray {
-                        events += [Event(name: event["name"] as! String, dictionary: event)]
+                        events += [Event(dictionary: event)]
                     }
                 
                     dispatch_async(dispatch_get_main_queue(), {
-                        completion(events: events)
+                        completion(events: events, error: nil)
                     })
                 } else {
                     dispatch_async(dispatch_get_main_queue(), {
-                        completion(events: nil)
+                        completion(events: nil, error: "No events found")
                     })
                 }
             } catch  {
-                print("error trying to convert data to JSON")
+                completion(events: nil, error: "error trying to convert data to JSON")
                 return
             }
         }
