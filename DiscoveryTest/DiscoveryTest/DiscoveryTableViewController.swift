@@ -50,9 +50,13 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         // assuming not empty text field
         
+        SVProgressHUD.show()
+        
         DiscoveryNetworkManager.sharedInstance.returnEvents(withKeyword: searchBar.text!) {
             (result, error) -> () in
-                        
+            
+            SVProgressHUD.dismiss()
+            
             guard error == nil else {
                 // Alert user of error
                 
