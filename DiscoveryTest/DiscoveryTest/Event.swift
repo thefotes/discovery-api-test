@@ -6,7 +6,7 @@
 //  Copyright © 2016 Jason Chitla. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 struct Event {
     var dictionary: [String: AnyObject]

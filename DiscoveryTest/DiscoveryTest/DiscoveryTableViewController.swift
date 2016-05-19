@@ -62,8 +62,15 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
             (result, error) -> () in
             
             self.indicator.stopAnimating()
+            
             guard error == nil else {
-                print(error!)
+                // Alert user of error
+                
+                let alertController = UIAlertController(title: "Error", message: error!, preferredStyle: .Alert)
+                let okButton = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+                alertController.addAction(okButton)
+                self.presentViewController(alertController, animated: true, completion: nil)
+                
                 return
             }
             
