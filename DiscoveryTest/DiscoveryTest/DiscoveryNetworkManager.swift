@@ -63,12 +63,16 @@ final class DiscoveryNetworkManager {
                 // access event names
                 if let eventArray = object["_embedded"]?["events"] as? [[String: AnyObject]] {
                     var events = [Event]()
-                
-                    for dictionary in eventArray {
+                    
+                    // passes in non-nil Events to events array
+                    
+                    events = eventArray.flatMap({dictionary in
                         if let event = Event.init(withDictionary: dictionary) {
-                            events += [event]
+                            return event
+                        } else {
+                            return nil
                         }
-                    }
+                    })
                 
                     dispatch_async(dispatch_get_main_queue(), {
                         completion(events: events, error: nil)
