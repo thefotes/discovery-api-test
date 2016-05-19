@@ -12,7 +12,6 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
     
     // MARK: Properties
     
-    let indicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
     @IBOutlet private weak var searchBar: UISearchBar!
     
     var events = [Event]()
@@ -21,9 +20,6 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
         super.viewDidLoad()
         
         searchBar.delegate = self
-        
-        indicator.center = view.center
-        view.addSubview(indicator)
     }
 
     // MARK: Table view data source
@@ -52,17 +48,11 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
     // MARK: Search Functionality
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        // start indicator
-        
-        indicator.startAnimating()
-        
         // assuming not empty text field
         
         DiscoveryNetworkManager.sharedInstance.returnEvents(withKeyword: searchBar.text!) {
             (result, error) -> () in
-            
-            self.indicator.stopAnimating()
-            
+                        
             guard error == nil else {
                 // Alert user of error
                 

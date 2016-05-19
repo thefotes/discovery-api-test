@@ -15,7 +15,7 @@ final class DiscoveryTableViewCell: UITableViewCell, TableViewCellReusable {
     @IBOutlet private weak var nameLabel: UILabel!
     
     func configureWithEvent(event: Event) {
-        nameLabel.text = event.dictionary["name"] as? String
+        nameLabel.text = event.name
     }
 
 }

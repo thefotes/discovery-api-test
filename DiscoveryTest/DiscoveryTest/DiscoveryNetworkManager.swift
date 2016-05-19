@@ -11,6 +11,8 @@ import UIKit
 
 final class DiscoveryNetworkManager {
     
+    typealias CompletionEvent = (events: [Event]?, error: String?) -> ()
+    
     // MARK: Properties
     
     // shared instance
@@ -27,7 +29,7 @@ final class DiscoveryNetworkManager {
     
     // get events with text
     
-    func returnEvents(withKeyword keyword: String, completion: (events: [Event]?, error: String?) -> ()) {
+    func returnEvents(withKeyword keyword: String, completion: CompletionEvent) {
         let endpoint: String = "https://app.ticketmaster.com/discovery/v1/events.json?apikey=WaPwayOHGN4PCY1EieuT2nCM5H8tufYf&keyword=" +
                                                                     keyword.stringByAddingPercentEncodingWithAllowedCharacters(.URLQueryAllowedCharacterSet())!
         guard let url = NSURL(string: endpoint) else {
@@ -62,8 +64,10 @@ final class DiscoveryNetworkManager {
                 if let eventArray = object["_embedded"]?["events"] as? [[String: AnyObject]] {
                     var events = [Event]()
                 
-                    for event in eventArray {
-                        events += [Event(dictionary: event)]
+                    for dictionary in eventArray {
+                        if let event = Event.init(withDictionary: dictionary) {
+                            events += [event]
+                        }
                     }
                 
                     dispatch_async(dispatch_get_main_queue(), {
