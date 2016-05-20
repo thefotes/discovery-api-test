@@ -20,6 +20,14 @@ final class DiscoveryNetworkManager {
     
     static let sharedInstance = DiscoveryNetworkManager()
     
+    // url configuration
+    
+    static let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+    
+    // url session
+    
+    let session = NSURLSession(configuration: config)
+    
     // MARK: Initialization
     
     // private init because its singleton
@@ -38,9 +46,6 @@ final class DiscoveryNetworkManager {
             return
         }
         let urlRequest = NSURLRequest(URL: url)
-        
-        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let session = NSURLSession(configuration: config)
         
         let task = session.dataTaskWithRequest(urlRequest) {
             (data, response, error) in
@@ -119,14 +124,6 @@ final class DiscoveryNetworkManager {
             return
         }
         let urlRequest = NSURLRequest(URL: url)
-        
-        // url configuration
-        
-        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        
-        // url session
-        
-        let session = NSURLSession(configuration: config)
         
         let task = session.dataTaskWithRequest(urlRequest) {
             (data, response, error) in

@@ -17,9 +17,9 @@ final class DiscoveryTableViewCell: UITableViewCell, TableViewCellReusable {
     
     func configureWithEvent(event: Event) {
         nameLabel.text = event.name
+        nameLabel.numberOfLines = 0
         if let imageUrl = event.imageUrl {
             ticketmasterImageView.sd_setImageWithURL(NSURL(string: imageUrl))
         }
     }
-
 }
