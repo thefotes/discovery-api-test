@@ -56,7 +56,7 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
         
         SVProgressHUD.show()
         
-        DiscoveryNetworkManager.sharedInstance.returnEvents(withKeyword: searchBar.text!) {
+        DiscoveryNetworkManager.sharedInstance.fetchEvents(withKeyword: searchBar.text!) {
             (result, error) -> () in
             
             SVProgressHUD.dismiss()

@@ -15,6 +15,7 @@ struct Event {
     let test: Bool
     let id: String
     let type: String
+    var imageUrl: String?
     
     init?(withDictionary dictionary: [String: AnyObject]) {
         guard let name = dictionary["name"] as? String, let locale = dictionary["locale"] as? String, let eventUrl = dictionary["eventUrl"] as? String,

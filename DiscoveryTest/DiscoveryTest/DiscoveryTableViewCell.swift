@@ -13,9 +13,13 @@ final class DiscoveryTableViewCell: UITableViewCell, TableViewCellReusable {
     // MARK: Properties
     
     @IBOutlet private weak var nameLabel: UILabel!
+    @IBOutlet weak var ticketmasterImageView: UIImageView!
     
     func configureWithEvent(event: Event) {
         nameLabel.text = event.name
+        if let imageUrl = event.imageUrl {
+            ticketmasterImageView.sd_setImageWithURL(NSURL(string: imageUrl))
+        }
     }
 
 }
