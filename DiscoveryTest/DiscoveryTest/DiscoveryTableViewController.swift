@@ -48,6 +48,10 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
     // MARK: Search Functionality
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        // resign first responder
+        
+        searchBar.resignFirstResponder()
+        
         // assuming not empty text field
         
         SVProgressHUD.show()
@@ -73,10 +77,6 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
                 self.tableView.reloadData()
             }
         }
-        
-        // resign first responder
-        
-        searchBar.resignFirstResponder()
     }
 
 }
