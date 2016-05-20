@@ -1,3 +1,6 @@
 [submodule "SVProgressHUD"]
 	path = SVProgressHUD
 	url = https://github.com/SVProgressHUD/SVProgressHUD.git
+[submodule "SDWebImage"]
+	path = SDWebImage
+	url = https://github.com/rs/SDWebImage.git
