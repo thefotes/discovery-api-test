@@ -9,7 +9,7 @@
 #ifndef DiscoveryTest_Bridging_Header_h
 #define DiscoveryTest_Bridging_Header_h
 
-//#import "SVProgressHUD.h"
+#import "SVProgressHUD.h"
 #import "UIImageView+WebCache.h"
 
 #endif /* DiscoveryTest_Bridging_Header_h */
