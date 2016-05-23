@@ -36,21 +36,22 @@ struct Event {
         self.date = setDate(rawDate)
     }
     
-    func setDate(date: String) -> String {
-        let dateComponents = NSDateComponents()
-        dateComponents.year = Int(date.substringWithRange(Range<String.Index>(date.startIndex..<date.endIndex.advancedBy(-24))))!
-        dateComponents.month = Int(date.substringWithRange(Range<String.Index>(date.startIndex.advancedBy(5)..<date.endIndex.advancedBy(-21))))!
-        dateComponents.day = Int(date.substringWithRange(Range<String.Index>(date.startIndex.advancedBy(8)..<date.endIndex.advancedBy(-18))))!
-        dateComponents.hour = Int(date.substringWithRange(Range<String.Index>(date.startIndex.advancedBy(11)..<date.endIndex.advancedBy(-15))))!
-        dateComponents.minute = Int(date.substringWithRange(Range<String.Index>(date.startIndex.advancedBy(14)..<date.endIndex.advancedBy(-12))))!
-        dateComponents.second = Int(date.substringWithRange(Range<String.Index>(date.startIndex.advancedBy(17)..<date.endIndex.advancedBy(-9))))!
-        let dateFromComponents = NSCalendar.currentCalendar().dateFromComponents(dateComponents)
-        
-        // NSDateFormatter
+    func setDate(date: String) -> String? {
+        // create NSDate object from raw date value passed in
         let formatter = NSDateFormatter()
-        formatter.dateStyle = NSDateFormatterStyle.FullStyle
-        formatter.timeStyle = .ShortStyle
+        formatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.sssZ"
+        let dateWithCorrectFormat = formatter.dateFromString(date)
         
-        return formatter.stringFromDate(dateFromComponents!)
+        // take the NSDate object, change it to aesthetically pleasing string
+        let displayFormatter = NSDateFormatter()
+        displayFormatter.dateStyle = .FullStyle
+        displayFormatter.timeStyle = .ShortStyle
+        
+        if let dateWithCorrectFormat = dateWithCorrectFormat {
+            return displayFormatter.stringFromDate(dateWithCorrectFormat)
+        } else {
+            return nil
+        }
     }
 }
