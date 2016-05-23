@@ -38,12 +38,12 @@ struct Event {
     
     func setDate(date: String) -> String {
         let dateComponents = NSDateComponents()
-        dateComponents.year = Int(date.substringWithRange(Range<String.Index>(start: date.startIndex, end: date.endIndex.advancedBy(-24))))!
-        dateComponents.month = Int(date.substringWithRange(Range<String.Index>(start: date.startIndex.advancedBy(5), end: date.endIndex.advancedBy(-21))))!
-        dateComponents.day = Int(date.substringWithRange(Range<String.Index>(start: date.startIndex.advancedBy(8), end: date.endIndex.advancedBy(-18))))!
-        dateComponents.hour = Int(date.substringWithRange(Range<String.Index>(start: date.startIndex.advancedBy(11), end: date.endIndex.advancedBy(-15))))!
-        dateComponents.minute = Int(date.substringWithRange(Range<String.Index>(start: date.startIndex.advancedBy(14), end: date.endIndex.advancedBy(-12))))!
-        dateComponents.second = Int(date.substringWithRange(Range<String.Index>(start: date.startIndex.advancedBy(17), end: date.endIndex.advancedBy(-9))))!
+        dateComponents.year = Int(date.substringWithRange(Range<String.Index>(date.startIndex..<date.endIndex.advancedBy(-24))))!
+        dateComponents.month = Int(date.substringWithRange(Range<String.Index>(date.startIndex.advancedBy(5)..<date.endIndex.advancedBy(-21))))!
+        dateComponents.day = Int(date.substringWithRange(Range<String.Index>(date.startIndex.advancedBy(8)..<date.endIndex.advancedBy(-18))))!
+        dateComponents.hour = Int(date.substringWithRange(Range<String.Index>(date.startIndex.advancedBy(11)..<date.endIndex.advancedBy(-15))))!
+        dateComponents.minute = Int(date.substringWithRange(Range<String.Index>(date.startIndex.advancedBy(14)..<date.endIndex.advancedBy(-12))))!
+        dateComponents.second = Int(date.substringWithRange(Range<String.Index>(date.startIndex.advancedBy(17)..<date.endIndex.advancedBy(-9))))!
         let dateFromComponents = NSCalendar.currentCalendar().dateFromComponents(dateComponents)
         
         // NSDateFormatter
