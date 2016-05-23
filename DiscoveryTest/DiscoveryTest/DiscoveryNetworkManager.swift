@@ -93,8 +93,11 @@ final class DiscoveryNetworkManager {
                     })
                     
                     // set image urls for each event in events array
+                    // first creating a dispatch group
+                    let imageGroup = dispatch_group_create()
                     
                     for i in 0 ..< events.count {
+                        dispatch_group_enter(imageGroup)
                         DiscoveryNetworkManager.sharedInstance.fetchEventImageUrlById(events[i].id) {
                             (result, error) -> () in
                             
@@ -105,13 +108,15 @@ final class DiscoveryNetworkManager {
                             
                             if let result = result {
                                 events[i].imageUrl = result
-                                dispatch_async(dispatch_get_main_queue(), {
-                                    completion(events: events, error: nil)
-                                })
+                                dispatch_group_leave(imageGroup)
                             }
                         }
                     }
-                
+                    dispatch_group_notify(imageGroup, dispatch_get_main_queue(), {
+                        dispatch_async(dispatch_get_main_queue(), {
+                            completion(events: events, error: nil)
+                        })
+                    })
                 } else {
                     dispatch_async(dispatch_get_main_queue(), {
                         completion(events: [], error: "No events found")
