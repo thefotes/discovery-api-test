@@ -15,13 +15,13 @@ struct Event {
     let test: Bool
     let id: String
     let type: String
-    let date: String
+    var date: String?
     var imageUrl: String?
     
     init?(withDictionary dictionary: [String: AnyObject]) {
         guard let name = dictionary["name"] as? String, let locale = dictionary["locale"] as? String, let eventUrl = dictionary["eventUrl"] as? String,
                 let test = dictionary["test"] as? Bool, let id = dictionary["id"] as? String, let type = dictionary["type"] as? String,
-                let date = dictionary["dates"]!["start"]!!["localDate"] as? String else {
+                let rawDate = dictionary["dates"]!["start"]!!["dateTime"] as? String else {
                     print("Error initializing event")
                     return nil
         }
@@ -31,6 +31,26 @@ struct Event {
         self.test = test
         self.id = id
         self.type = type
-        self.date = date
+        
+        // set date string
+        setDate(rawDate)
+    }
+    
+    mutating func setDate(date: String) {
+        let dateComponents = NSDateComponents()
+        dateComponents.year = Int(date.substringWithRange(Range<String.Index>(start: date.startIndex, end: date.endIndex.advancedBy(-24))))!
+        dateComponents.month = Int(date.substringWithRange(Range<String.Index>(start: date.startIndex.advancedBy(5), end: date.endIndex.advancedBy(-21))))!
+        dateComponents.day = Int(date.substringWithRange(Range<String.Index>(start: date.startIndex.advancedBy(8), end: date.endIndex.advancedBy(-18))))!
+        dateComponents.hour = Int(date.substringWithRange(Range<String.Index>(start: date.startIndex.advancedBy(11), end: date.endIndex.advancedBy(-15))))!
+        dateComponents.minute = Int(date.substringWithRange(Range<String.Index>(start: date.startIndex.advancedBy(14), end: date.endIndex.advancedBy(-12))))!
+        dateComponents.second = Int(date.substringWithRange(Range<String.Index>(start: date.startIndex.advancedBy(17), end: date.endIndex.advancedBy(-9))))!
+        let dateFromComponents = NSCalendar.currentCalendar().dateFromComponents(dateComponents)
+        
+        // NSDateFormatter
+        let formatter = NSDateFormatter()
+        formatter.dateStyle = NSDateFormatterStyle.FullStyle
+        formatter.timeStyle = .ShortStyle
+        
+        self.date = formatter.stringFromDate(dateFromComponents!)
     }
 }
