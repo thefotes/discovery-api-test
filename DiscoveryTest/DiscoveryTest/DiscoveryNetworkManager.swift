@@ -11,22 +11,36 @@ import UIKit
 
 final class DiscoveryNetworkManager {
     
+    // MARK: URL Enum
+    
+    enum URL {
+        case fetchEvents(apiKey: String, keyword: String)
+        case fetchEventImages(apiKey: String, id: String)
+        
+        func requestUrl() -> NSURL? {
+            switch self {
+            case .fetchEvents(let apiKey, let keyword):
+                return NSURL(string: "https://app.ticketmaster.com/discovery/v1/events.json?apikey=" + apiKey + "&keyword=" +
+                                                                    keyword.stringByAddingPercentEncodingWithAllowedCharacters(.URLQueryAllowedCharacterSet())!)
+            case .fetchEventImages(let apiKey, let id):
+                return NSURL(string: "https://app.ticketmaster.com/discovery/v1/events/" + id.stringByAddingPercentEncodingWithAllowedCharacters(.URLQueryAllowedCharacterSet())! +
+                                                        "/images.json?apikey=" + apiKey)
+            }
+        }
+    }
+    
     typealias CompletionEvent = (events: [Event]?, error: String?) -> ()
-    typealias CompletionEventInit = (eventUrl: String?, error: String?) -> ()
+    typealias FetchEventImageCompletion = (eventUrl: String?, error: String?) -> ()
     
     // MARK: Properties
     
-    // shared instance
-    
     static let sharedInstance = DiscoveryNetworkManager()
     
-    // url configuration
+    // MARK: Network Configuration
     
-    static let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-    
-    // url session
-    
-    let session = NSURLSession(configuration: config)
+    private static let sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+    private let session = NSURLSession(configuration: sessionConfig)
+    private let API_KEY: String = "WaPwayOHGN4PCY1EieuT2nCM5H8tufYf"
     
     // MARK: Initialization
     
@@ -39,9 +53,7 @@ final class DiscoveryNetworkManager {
     // get events with text
     
     func fetchEvents(withKeyword keyword: String, completion: CompletionEvent) {
-        let endpoint: String = "https://app.ticketmaster.com/discovery/v1/events.json?apikey=WaPwayOHGN4PCY1EieuT2nCM5H8tufYf&keyword=" +
-                                                                    keyword.stringByAddingPercentEncodingWithAllowedCharacters(.URLQueryAllowedCharacterSet())!
-        guard let url = NSURL(string: endpoint) else {
+        guard let url = URL.fetchEvents(apiKey: API_KEY, keyword: keyword).requestUrl() else {
             completion(events: nil, error: "Error: cannot create URL")
             return
         }
@@ -114,12 +126,9 @@ final class DiscoveryNetworkManager {
         
     }
     
-    func fetchEventImageUrlById(id: String, completion: CompletionEventInit) {
-        let endpoint: String = "https://app.ticketmaster.com/discovery/v1/events/" +
-                                                                        id.stringByAddingPercentEncodingWithAllowedCharacters(.URLQueryAllowedCharacterSet())! +
-                                                                        "/images.json?apikey=WaPwayOHGN4PCY1EieuT2nCM5H8tufYf"
+    func fetchEventImageUrlById(id: String, completion: FetchEventImageCompletion) {
         
-        guard let url = NSURL(string: endpoint) else {
+        guard let url = URL.fetchEventImages(apiKey: API_KEY, id: id).requestUrl() else {
             completion(eventUrl: nil, error: "Error: cannot create URL")
             return
         }
