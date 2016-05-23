@@ -12,17 +12,14 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
     
     // MARK: Properties
     
-    var events = [Event]()
     @IBOutlet private weak var searchBar: UISearchBar!
+    
+    var events = [Event]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         searchBar.delegate = self
-        
-        // call api
-        
-        DiscoveryNetworkManager.sharedInstance.getRecentEventsIntoConsole()
     }
 
     // MARK: Table view data source
@@ -32,7 +29,7 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return events.count
+        return self.events.count
     }
 
     
@@ -40,12 +37,45 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
 
         let dequeuedCell = tableView.dequeueReusableCellWithIdentifier(DiscoveryTableViewCell.reuseableIdentifier, forIndexPath: indexPath) as! DiscoveryTableViewCell
         
-        // Return appropriate event
-        
-        let event = events[indexPath.row]
-        dequeuedCell.configureWithEvent(event)
+        // return appropriate event
+        if !events.isEmpty {
+            let event = events[indexPath.row]
+            dequeuedCell.configureWithEvent(event)
+        }
 
         return dequeuedCell
+    }
+    
+    // MARK: Search Functionality
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        // resign first responder
+        
+        searchBar.resignFirstResponder()
+        
+        // assuming not empty text field
+        
+        SVProgressHUD.show()
+        
+        DiscoveryNetworkManager.sharedInstance.fetchEvents(withKeyword: searchBar.text!) {
+            (result, error) -> () in
+            
+            SVProgressHUD.dismiss()
+            
+            guard error == nil else {
+                // Alert user of error
+                
+                let alertController = UIAlertController(title: "Error", message: error!, preferredStyle: .Alert)
+                let okButton = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+                alertController.addAction(okButton)
+                self.presentViewController(alertController, animated: true, completion: nil)
+                
+                return
+            }
+            
+            self.events = result
+            self.tableView.reloadData()
+        }
     }
 
 }
