@@ -15,11 +15,13 @@ struct Event {
     let test: Bool
     let id: String
     let type: String
+    let date: String
     var imageUrl: String?
     
     init?(withDictionary dictionary: [String: AnyObject]) {
         guard let name = dictionary["name"] as? String, let locale = dictionary["locale"] as? String, let eventUrl = dictionary["eventUrl"] as? String,
-                let test = dictionary["test"] as? Bool, let id = dictionary["id"] as? String, let type = dictionary["type"] as? String else {
+                let test = dictionary["test"] as? Bool, let id = dictionary["id"] as? String, let type = dictionary["type"] as? String,
+                let date = dictionary["dates"]!["start"]!!["localDate"] as? String else {
                     print("Error initializing event")
                     return nil
         }
@@ -29,5 +31,6 @@ struct Event {
         self.test = test
         self.id = id
         self.type = type
+        self.date = date
     }
 }
