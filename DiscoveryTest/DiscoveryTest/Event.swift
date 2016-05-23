@@ -33,10 +33,10 @@ struct Event {
         self.type = type
         
         // set date string
-        setDate(rawDate)
+        self.date = setDate(rawDate)
     }
     
-    mutating func setDate(date: String) {
+    func setDate(date: String) -> String {
         let dateComponents = NSDateComponents()
         dateComponents.year = Int(date.substringWithRange(Range<String.Index>(start: date.startIndex, end: date.endIndex.advancedBy(-24))))!
         dateComponents.month = Int(date.substringWithRange(Range<String.Index>(start: date.startIndex.advancedBy(5), end: date.endIndex.advancedBy(-21))))!
@@ -51,6 +51,6 @@ struct Event {
         formatter.dateStyle = NSDateFormatterStyle.FullStyle
         formatter.timeStyle = .ShortStyle
         
-        self.date = formatter.stringFromDate(dateFromComponents!)
+        return formatter.stringFromDate(dateFromComponents!)
     }
 }
