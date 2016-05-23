@@ -38,9 +38,10 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
         let dequeuedCell = tableView.dequeueReusableCellWithIdentifier(DiscoveryTableViewCell.reuseableIdentifier, forIndexPath: indexPath) as! DiscoveryTableViewCell
         
         // return appropriate event
-        
-        let event = events[indexPath.row]
-        dequeuedCell.configureWithEvent(event)
+        if !events.isEmpty {
+            let event = events[indexPath.row]
+            dequeuedCell.configureWithEvent(event)
+        }
 
         return dequeuedCell
     }
@@ -72,10 +73,8 @@ final class DiscoveryTableViewController: UITableViewController, UISearchBarDele
                 return
             }
             
-            if let result = result {
-                self.events = result
-                self.tableView.reloadData()
-            }
+            self.events = result
+            self.tableView.reloadData()
         }
     }
 

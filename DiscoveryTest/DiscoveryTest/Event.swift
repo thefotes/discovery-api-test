@@ -16,7 +16,7 @@ struct Event {
     let id: String
     let type: String
     var date: String?
-    var imageUrl: String?
+    var imageUrl: NSURL?
     
     init?(withDictionary dictionary: [String: AnyObject]) {
         guard let name = dictionary["name"] as? String, let locale = dictionary["locale"] as? String, let eventUrl = dictionary["eventUrl"] as? String,

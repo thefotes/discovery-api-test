@@ -23,7 +23,7 @@ final class DiscoveryTableViewCell: UITableViewCell, TableViewCellReusable {
             dateLabel.text = date
         }
         if let imageUrl = event.imageUrl {
-            ticketmasterImageView.sd_setImageWithURL(NSURL(string: imageUrl))
+            ticketmasterImageView.sd_setImageWithURL(imageUrl)
         }
     }
 }

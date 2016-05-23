@@ -29,8 +29,8 @@ final class DiscoveryNetworkManager {
         }
     }
     
-    typealias CompletionEvent = (events: [Event]?, error: String?) -> ()
-    typealias FetchEventImageCompletion = (eventUrl: String?, error: String?) -> ()
+    typealias CompletionEvent = (events: [Event], error: String?) -> ()
+    typealias FetchEventImageCompletion = (imageUrl: NSURL?, error: String?) -> ()
     
     // MARK: Properties
     
@@ -54,7 +54,7 @@ final class DiscoveryNetworkManager {
     
     func fetchEvents(withKeyword keyword: String, completion: CompletionEvent) {
         guard let url = URL.fetchEvents(apiKey: API_KEY, keyword: keyword).requestUrl() else {
-            completion(events: nil, error: "Error: cannot create URL")
+            completion(events: [], error: "Error: cannot create URL")
             return
         }
         let urlRequest = NSURLRequest(URL: url)
@@ -63,18 +63,18 @@ final class DiscoveryNetworkManager {
             (data, response, error) in
             // check for any errors
             guard error == nil else {
-                completion(events: nil, error: "error calling GET on /discovery/v1 w/error code: \(error!.code)")
+                completion(events: [], error: "error calling GET on /discovery/v1 w/error code: \(error!.code)")
                 return
             }
             // make sure there's data
             guard let responseData = data else {
-                completion(events: nil, error: "Error: did not receive data")
+                completion(events: [], error: "Error: did not receive data")
                 return
             }
             // parse result as JSON
             do {
                 guard let object = try NSJSONSerialization.JSONObjectWithData(responseData, options: []) as? [String: AnyObject] else {
-                    completion(events: nil, error: "error trying to convert data to JSON")
+                    completion(events: [], error: "error trying to convert data to JSON")
                     return
                 }
                 
@@ -114,11 +114,11 @@ final class DiscoveryNetworkManager {
                 
                 } else {
                     dispatch_async(dispatch_get_main_queue(), {
-                        completion(events: nil, error: "No events found")
+                        completion(events: [], error: "No events found")
                     })
                 }
             } catch  {
-                completion(events: nil, error: "error trying to convert data to JSON")
+                completion(events: [], error: "error trying to convert data to JSON")
                 return
             }
         }
@@ -129,7 +129,7 @@ final class DiscoveryNetworkManager {
     func fetchEventImageUrlById(id: String, completion: FetchEventImageCompletion) {
         
         guard let url = URL.fetchEventImages(apiKey: API_KEY, id: id).requestUrl() else {
-            completion(eventUrl: nil, error: "Error: cannot create URL")
+            completion(imageUrl: nil, error: "Error: cannot create URL")
             return
         }
         let urlRequest = NSURLRequest(URL: url)
@@ -138,33 +138,33 @@ final class DiscoveryNetworkManager {
             (data, response, error) in
             // check for any errors
             guard error == nil else {
-                completion(eventUrl: nil, error: "error calling GET on /discovery/v1 w/error code: \(error!.code)")
+                completion(imageUrl: nil, error: "error calling GET on /discovery/v1 w/error code: \(error!.code)")
                 return
             }
             // make sure there's data
             guard let responseData = data else {
-                completion(eventUrl: nil, error: "Error: did not receive data")
+                completion(imageUrl: nil, error: "Error: did not receive data")
                 return
             }
             // parse result as JSON
             do {
                 guard let object = try NSJSONSerialization.JSONObjectWithData(responseData, options: []) as? [String: AnyObject] else {
-                    completion(eventUrl: nil, error: "error trying to convert data to JSON")
+                    completion(imageUrl: nil, error: "error trying to convert data to JSON")
                     return
                 }
                 
                 // access event image url
-                if let imageUrl = object["images"] as? [AnyObject] {
+                if let imageUrl = object["images"] as? [AnyObject], let string = imageUrl[0]["url"] as? String {
                     dispatch_async(dispatch_get_main_queue(), {
-                        completion(eventUrl: imageUrl[0]["url"] as? String, error: nil)
+                        completion(imageUrl: NSURL(string: string), error: nil)
                     })
                 } else {
                     dispatch_async(dispatch_get_main_queue(), {
-                        completion(eventUrl: nil, error: "No image url")
+                        completion(imageUrl: nil, error: "No image url")
                     })
                 }
             } catch  {
-                completion(eventUrl: nil, error: "error trying to convert data to JSON")
+                completion(imageUrl: nil, error: "error trying to convert data to JSON")
                 return
             }
         }
